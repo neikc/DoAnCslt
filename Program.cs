@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
-
+using System.IO;
 struct Flashcard
 {
     //public string FirstFace { get; set; }:
@@ -593,6 +593,8 @@ class Program
         if (flashcards.Length == 0)
         {
             Console.WriteLine("Không có từ vựng nào để học, hãy nhập thêm từ vựng");
+            Console.WriteLine("Bấm phím Enter để tiếp tục...");
+            Console.ReadLine();
             return flashcards;
         }
 
@@ -694,6 +696,8 @@ class Program
         if (flashcards.Length == 0)
         {
             Console.WriteLine("Không có từ vựng nào để chơi");
+            Console.WriteLine("Bấm phím Enter để tiếp tục...");
+            Console.ReadLine();
             return;
         }
 
@@ -1287,6 +1291,8 @@ class Program
         if (flashcards.Length == 0)
         {
             Console.WriteLine("Không có từ vựng nào để ôn tập");
+            Console.WriteLine("Bấm phím Enter để tiếp tục...");
+            Console.ReadLine();
             return;
         }
         Console.Clear();
