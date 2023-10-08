@@ -270,10 +270,10 @@ class Program
             flashcards = AddFlashcard(flashcards, flashcard);
 
             Console.WriteLine("Flashcard đã được thêm!");
-            Console.Write("Nhập X để thoát, bấm Enter để tiếp tục...");
-            string response = Console.ReadLine().Trim().ToUpper();
 
-            if (response == "X")
+            Console.WriteLine("   Bấm X để thoát, bấm phím Enter để tiếp tục...");
+            ConsoleKeyInfo keyInfo = Console.ReadKey();
+            if (keyInfo.Key == ConsoleKey.X)
             {
                 break;
             }
@@ -326,9 +326,8 @@ class Program
             Console.ReadLine();
             return flashcards;
         }
-        bool continueEdit = true;
 
-        while (continueEdit)
+        while (true)
         {
             //In ra danh sách các flashcard
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -436,13 +435,14 @@ class Program
             selectedFlashcard.LastModified = DateTime.Now;
             flashcards[index] = selectedFlashcard;
             Console.WriteLine("Flashcard đã được điều chỉnh!");
-            Console.Write("Nhập Y để tiếp tục chỉnh sửa, nếu không Enter để tiếp tục... ");
-            string response = Console.ReadLine().Trim().ToUpper();
 
-            if (response != "Y")
+            Console.WriteLine("   Bấm X để thoát, bấm phím Enter để tiếp tục...");
+            ConsoleKeyInfo keyInfo = Console.ReadKey();
+            if (keyInfo.Key == ConsoleKey.X)
             {
-                continueEdit = false;
+                break;
             }
+
         }
 
         return flashcards;
@@ -505,9 +505,8 @@ class Program
             Console.ReadLine();
             return flashcards;
         }
-        bool continueDeleting = true;
 
-        while (continueDeleting)
+        while (true)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("Danh sách các flashcard:");
@@ -571,14 +570,12 @@ class Program
             updatedFlashcardList.RemoveAt(index - 1);
             flashcards = updatedFlashcardList.ToArray();
             Console.WriteLine("Flashcard đã được xóa!");
-            
 
-            Console.Write("Nhập Y để tiếp tục xóa, nếu không bấm phím Enter để tiếp tục...");
-            string response = Console.ReadLine().Trim().ToUpper();
-
-            if (response != "Y")
+            Console.WriteLine("   Bấm X để thoát, bấm phím Enter để tiếp tục...");
+            ConsoleKeyInfo keyInfo = Console.ReadKey();
+            if (keyInfo.Key == ConsoleKey.X)
             {
-                continueDeleting = false;
+                break;
             }
         }
 
