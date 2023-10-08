@@ -599,11 +599,12 @@ class Program
         //DateTime today = ...;: Là cách khai báo và khởi tạo biến today kiểu DateTime,
         //được gán giá trị là thời điểm là ngày hôm nay.
         DateTime today = DateTime.Now.Date;
-        bool isStudyToday = false;
+        
 
         //Chạy đến khi nào không còn từ hôm nay học nữa
         while (true)
         {
+            bool isStudyToday = false;
             for (int i = 0; i < flashcards.Length; i++)
             {
                 Console.Clear();
