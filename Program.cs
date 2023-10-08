@@ -521,8 +521,6 @@ class Program
             Console.ResetColor();
 
             Console.Write("Chọn flashcard để xóa (nhập số thứ tự): ");
-
-            Console.Write("Chọn flashcard để chỉnh sửa (nhập số thứ tự): ");
             int index = -1;
             bool isValidIndex = false;
 
