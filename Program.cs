@@ -388,7 +388,8 @@ class Program
             Flashcard selectedFlashcard = flashcards[index];
             string editChoice;
 
-            do
+            bool isEdit = true;
+            while (isEdit)
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Cyan;
@@ -396,8 +397,7 @@ class Program
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"1. Chỉnh sửa từ ({selectedFlashcard.FirstFace})");
                 Console.WriteLine($"2. Chỉnh sửa nghĩa ({selectedFlashcard.SecondFace})");
-                Console.WriteLine($"3. Chỉnh sửa cả từ và nghĩa");
-                Console.WriteLine($"4. Thoát chỉnh sửa");
+                Console.WriteLine($"3. Thoát chỉnh sửa");
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.ResetColor();
 
@@ -415,26 +415,22 @@ class Program
                         selectedFlashcard.SecondFace = Console.ReadLine();
                         break;
                     case "3":
-                        Console.Write("Nhập từ mới: ");
-                        selectedFlashcard.FirstFace = Console.ReadLine();
-                        Console.Write("Nhập nghĩa mới: ");
-                        selectedFlashcard.SecondFace = Console.ReadLine();
-                        break;
-                    case "4":
+                        // Cập nhật ngày chỉnh sửa
+                        selectedFlashcard.LastModified = DateTime.Now;
+                        flashcards[index] = selectedFlashcard;
+                        Console.WriteLine("Flashcard đã được điều chỉnh!");
                         //Nếu chọn 4 là không muốn chỉnh sửa nữa
-                        return flashcards;
+                        isEdit = false;
+                        break;
                     default:
                         Console.WriteLine("Lựa chọn không hợp lệ. Vui lòng nhập lại.");
                         Console.WriteLine("Ấn phím Enter để tiếp tục...");
                         Console.ReadLine();
                         break;
                 }
-            } while (editChoice != "1" && editChoice != "2");
+            }
 
-            // Cập nhật ngày chỉnh sửa
-            selectedFlashcard.LastModified = DateTime.Now;
-            flashcards[index] = selectedFlashcard;
-            Console.WriteLine("Flashcard đã được điều chỉnh!");
+            
 
             Console.WriteLine("   Bấm X để thoát, bấm phím Enter để tiếp tục...");
             ConsoleKeyInfo keyInfo = Console.ReadKey();
@@ -498,16 +494,16 @@ class Program
     //Thủ tục xóa flashcard
     static Flashcard[] DeleteFlashcards(Flashcard[] flashcards)
     {
-        if (flashcards.Length == 0)
-        {
-            Console.WriteLine("Không có từ vựng nào để xóa");
-            Console.WriteLine("Bấm phím Enter để tiếp tục");
-            Console.ReadLine();
-            return flashcards;
-        }
-
         while (true)
         {
+            if (flashcards.Length == 0)
+            {
+                Console.WriteLine("Không có từ vựng nào để xóa");
+                Console.WriteLine("Bấm phím Enter để tiếp tục");
+                Console.ReadLine();
+                return flashcards;
+            }
+
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("Danh sách các flashcard:");
             //Nếu chọn số 0 thì tức là người ta không muốn xóa nữa
@@ -558,14 +554,12 @@ class Program
             // Tạo một danh sách mới không bao gồm flashcard cần xóa
             List<Flashcard> updatedFlashcardList = flashcards.ToList();
 
-            //updatedFlashcardList.RemoveAt(index - 1);
+            //updatedFlashcardList.RemoveAt(index);
             //được sử dụng để xóa một phần tử cụ thể từ List<Flashcard> có tên là updatedFlashcardList.
 
-            //RemoveAt(index - 1): Phương thức này xóa phần tử tại chỉ số được chỉ định từ List.
-            //Trong trường hợp này, index - 1 là chỉ số của phần tử cần xóa.
-            //Do mảng và List bắt đầu từ chỉ số 0, nên index - 1 được sử dụng để chuyển đổi
-            //giữa chỉ số của người dùng (bắt đầu từ 1) và chỉ số của List (bắt đầu từ 0).
-            updatedFlashcardList.RemoveAt(index - 1);
+            //RemoveAt(index): Phương thức này xóa phần tử tại chỉ số được chỉ định từ List.
+            //Trong trường hợp này, index là chỉ số của phần tử cần xóa.
+            updatedFlashcardList.RemoveAt(index);
             flashcards = updatedFlashcardList.ToArray();
             Console.WriteLine("Flashcard đã được xóa!");
 
