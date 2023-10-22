@@ -2,6 +2,8 @@
 using System.Runtime.InteropServices;
 using System.Text;
 using System.IO;
+using System.Globalization;
+
 struct Flashcard
 {
     //public string FirstFace { get; set; }:
@@ -26,6 +28,7 @@ class Program
         //sử dụng để đặt bảng mã xuất của bảng mã cho console thành UTF8e.
         //Thiết lập bảng mã xuất để hỗ trợ ký tự UTF8 khi xuất dữ liệu ra console.
         Console.OutputEncoding = Encoding.UTF8;
+        Console.InputEncoding = Encoding.UTF8;
         Flashcard[] flashcards = LoadFlashcards();
 
         while (true)
@@ -1275,6 +1278,31 @@ class Program
         }
     }
     //-----------------------------------------------------------------------------------------
+    //Phương thức xóa dấu kí tự
+    static string RemoveAccent(string input)
+    {
+        string result = "";
+        string Vietnormal = "àáảãạâầấẩẫậăằắẳẵặèéẻẽẹêềếểễệđìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵ";
+        string Vietnoaccent = "aaaaaaaaaaaaaaaaaaeeeeeeeeeeeddiiiiioooooooooooooooooooouuuuuuuuuuyyyyyy";
+
+        foreach (char c in input)
+        {
+            int index = Vietnormal.IndexOf(c);
+            if (index >= 0)
+            {
+                // Thay thế ký tự có dấu bằng ký tự không dấu tương ứng
+                result += Vietnoaccent[index];
+            }
+            else
+            {
+                // Nếu không phải, giữ nguyên ký tự
+                result += c;
+            }
+        }
+
+
+        return result;
+    }
 
     static void GameFunny(Flashcard[] flashcards)
     {
@@ -1321,13 +1349,24 @@ class Program
             Flashcard randomFlashcard = flashcards[currentIndex];
 
             // Lấy từ từ flashcard
-            string randomWord = randomFlashcard.FirstFace.ToLower();
+            //xóa dấu của từ vựng đang đoán
+            string randomWord = RemoveAccent(randomFlashcard.FirstFace.ToLower());
 
             // Hiển thị gợi ý cho người chơi
             Console.WriteLine($"Gợi ý: {randomFlashcard.SecondFace}");
 
             char[] revealedChars = new string('_', randomWord.Length).ToCharArray();
             int incorrectGuesses = 0;
+
+
+            //Nếu là kí tự khoảng trắng thì cho nó hiện ra luôn, không cần đợi đoán
+            for (int i = 0; i < revealedChars.Length; i++)
+            {
+                if (revealedChars[i] == '_' && randomWord[i] == ' ')
+                {
+                    revealedChars[i] = ' ';
+                }
+            }
 
             while (incorrectGuesses < randomWord.Length && revealedChars.Contains('_'))
             {
@@ -1339,7 +1378,6 @@ class Program
                 ConsoleKeyInfo keyInfo = Console.ReadKey();
                 Console.WriteLine();
                 char guess = keyInfo.KeyChar;
-
 
                 bool correctGuess = false;
                 for (int i = 0; i < revealedChars.Length; i++)
