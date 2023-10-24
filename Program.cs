@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.IO;
 using System.Globalization;
+using System.Threading.Tasks.Sources;
 
 struct Flashcard
 {
@@ -596,7 +597,10 @@ class Program
         //DateTime today = ...;: Là cách khai báo và khởi tạo biến today kiểu DateTime,
         //được gán giá trị là thời điểm là ngày hôm nay.
         DateTime today = DateTime.Now.Date;
-        
+
+        Console.WriteLine("Mời bạn nhập tên: ");
+        string name = Console.ReadLine();
+
 
         //Chạy đến khi nào không còn từ hôm nay học nữa
         while (true)
@@ -605,6 +609,7 @@ class Program
             for (int i = 0; i < flashcards.Length; i++)
             {
                 Console.Clear();
+                Console.WriteLine($"Chào mừng bạn {name}");
                 Console.WriteLine($"Từ vựng {today} cần ôn tập");
                 Console.WriteLine("Hướng dẫn: Bấm Enter để xem nghĩa của từ");
                 Console.WriteLine();
@@ -706,6 +711,9 @@ class Program
         Console.Clear();
         Console.WriteLine("Chào mừng đến với trò chơi sắp xếp từ!");
         Console.WriteLine("Mỗi lượt chơi, bạn sẽ được ôn lại 5 từ vựng");
+        //Đoạn nhập tên
+        Console.WriteLine("Mời bạn nhập tên: ");
+        string name = Console.ReadLine();
 
         int totalWords = flashcards.Length;
         int correctCount = 0;
@@ -739,10 +747,28 @@ class Program
             wordIndices[i] = wordIndices[j];
             wordIndices[j] = temp;
         }
-
+        int[] isPlay = new int[flashcards.Length];
+        for (int i = 0; i < flashcards.Length; i++) isPlay[i] = 0;
         //Đoạn bắt đầu trò chơi
-        for (wordIndex=0; wordIndex < wordIndices.Length; wordIndex++)
+        while (true)
         {
+            wordIndex = random.Next(0, flashcards.Length);
+
+            int tmp = 0;
+            for (int i = 0; i < flashcards.Length; i++)
+            {
+                if (isPlay[i] == 1) tmp++;
+            }
+            if (tmp == flashcards.Length)
+            {
+                break;
+            }
+
+            if (isPlay[wordIndex] == 1) continue;
+
+            
+
+
             //Câu đố hiện tại là currentIndex
             int currentIndex = wordIndices[wordIndex];
             Console.Clear();
@@ -764,6 +790,7 @@ class Program
                 if (userInput == word)
                 {
                     Console.WriteLine("     Chính xác!");
+                    isPlay[wordIndex] = 1;
                     Console.WriteLine($"     Từ và nghĩa: {word} --- {meaning}");
                     correctCount++;
                     incorrectCount = 0;
@@ -778,13 +805,13 @@ class Program
                     //Nếu sai ba lần, chưa đến 3 lần
                     if (incorrectCount < 3)
                     {
-                        Console.WriteLine("     Sai! Bạn còn " + (3 - incorrectCount) + " lượt thử.");
+                        Console.WriteLine($"     Sai! Bạn {name} còn " + (3 - incorrectCount) + " lượt thử.");
                         Console.WriteLine("Bấm phím Enter để tiếp tục...");
                         Console.ReadLine();
                     }
                     else
                     {
-                        Console.WriteLine("     Bạn đã nhập sai quá 3 lần");
+                        Console.WriteLine($"     Bạn {name} đã nhập sai quá 3 lần");
                         Console.WriteLine($"     Đáp án: {word} ({meaning})");
                         incorrectCount = 0;
                         Console.WriteLine("Bấm phím Enter để tiếp tục...");
@@ -801,7 +828,7 @@ class Program
                 {
                     try
                     {
-                        Console.Write("     Bạn có muốn tiếp tục chơi không? (1: Yes, 2: No): ");
+                        Console.Write($"     Bạn {name} có muốn tiếp tục chơi không? (1: Yes, 2: No): ");
                         string continueInput = Console.ReadLine();
 
                         // Kiểm tra điều kiện để thoát khỏi vòng lặp
@@ -810,13 +837,17 @@ class Program
                             Console.WriteLine("     === Kết Quả Trò Chơi ===");
 
                             Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("     Bạn đã hoàn thành trò chơi!");
+                            Console.WriteLine($"     Bạn {name} đã hoàn thành trò chơi!");
                             Console.ResetColor();
-
+                            
                             Console.ForegroundColor = ConsoleColor.Cyan;
+                            /*
                             Console.WriteLine($"        Số từ đúng: {correctCount}");
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine($"        Số từ sai: {incorrectCount}");
+                            */
+                            //In ra điểm của trò chơi
+                            Console.WriteLine($"        Bạn {name} đã đạt được {correctCount} điểm!");
                             Console.ResetColor();
 
                             Console.ReadLine();
@@ -843,13 +874,20 @@ class Program
         Console.WriteLine("     === Kết Quả Trò Chơi ===");
 
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("     Bạn đã hoàn thành trò chơi!");
+        Console.WriteLine($"     Bạn {name} đã hoàn thành trò chơi!");
         Console.ResetColor();
 
         Console.ForegroundColor = ConsoleColor.Cyan;
+        /*
         Console.WriteLine($"        Số từ đúng: {correctCount}");
         Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine($"        Số từ sai: {incorrectCount}");
+        */
+
+        //In ra điểm của trò chơi
+        Console.WriteLine($"        Bạn {name} đã đạt được {correctCount} điểm!");
+
+
         Console.ResetColor();
 
         Console.WriteLine("Bấm phím Enter để tiếp tục...");
@@ -1316,6 +1354,11 @@ class Program
         Console.Clear();
         Console.WriteLine("    Trò chơi đoán từ");
         Console.WriteLine();
+        ///Đoạn mới thêm vào - Đoạn đặt tên
+        Console.WriteLine("Mời bạn nhập tên: ");
+        string name = Console.ReadLine();
+        /////////////////////
+
 
         // Lấy ngẫu nhiên một flashcard từ danh sách
         int totalWords = flashcards.Length;
@@ -1343,8 +1386,30 @@ class Program
         }
 
 
-        for (wordIndex = 0; wordIndex < totalWords; ++wordIndex)
+        int[] isPlay = new int[flashcards.Length];
+        for (int i = 0; i < flashcards.Length; i++) isPlay[i] = 0;
+        //for (wordIndex = 0; wordIndex < totalWords; ++wordIndex)
+        while (true)
         {
+
+            wordIndex = random.Next(0, flashcards.Length);
+
+            int tmp = 0;
+            for (int i = 0; i < flashcards.Length; i++)
+            {
+                if (isPlay[i] == 1) tmp++;
+            }
+            if (tmp == flashcards.Length)
+            {
+                Console.WriteLine("Bạn đã chơi hết từ vựng trong kho từ. Bấm Enter để thoát");
+                Console.ReadLine();
+                return;
+            }
+
+            if (isPlay[wordIndex] == 1) continue;
+
+            
+
             int currentIndex = wordIndices[wordIndex];
             Flashcard randomFlashcard = flashcards[currentIndex];
 
@@ -1360,11 +1425,14 @@ class Program
 
 
             //Nếu là kí tự khoảng trắng thì cho nó hiện ra luôn, không cần đợi đoán
+            int blanknum = 0;
+            int score = 0;
             for (int i = 0; i < revealedChars.Length; i++)
             {
                 if (revealedChars[i] == '_' && randomWord[i] == ' ')
                 {
                     revealedChars[i] = ' ';
+                    blanknum++;
                 }
             }
 
@@ -1385,6 +1453,7 @@ class Program
                     if (revealedChars[i] == '_' && randomWord[i] == guess)
                     {
                         revealedChars[i] = guess;
+                        score++;
                         correctGuess = true;
                     }
                 }
@@ -1399,7 +1468,9 @@ class Program
             if (incorrectGuesses >= 7 || incorrectGuesses>=randomFlashcard.FirstFace.Length)
             {
                 DeathGraphic();
-                Console.WriteLine("    Bạn đã thua cuộc!");
+                //Bổ sung thêm đoạn này
+                Console.WriteLine($"    Bạn {name} đã thua cuộc!");
+                Console.WriteLine($"    Bạn {name} đã dành được {score} điểm");
                 Console.WriteLine($"    Đáp án: {randomFlashcard.FirstFace} --- {randomFlashcard.SecondFace}");
                 Console.WriteLine("    Bấm phím Enter để tiếp tục...");
                 Console.ReadLine();
@@ -1407,7 +1478,11 @@ class Program
             else
             {
                 RenderGameState(incorrectGuesses, revealedChars);
-                Console.WriteLine("    Bạn chiến thắng!");
+                Console.WriteLine($"    Bạn {name} chiến thắng!");
+
+                isPlay[wordIndex] = 1;
+
+                Console.WriteLine($"    Bạn {name} đã dành được {score} điểm");
                 Console.WriteLine("    Bấm phím Enter để tiếp tục...");
                 Console.ReadLine();
             }
@@ -1419,7 +1494,7 @@ class Program
                 {
                     try
                     {
-                        Console.Write("Bạn có muốn tiếp tục chơi không? (1: Yes, 2: No): ");
+                        Console.Write($"Bạn {name} có muốn tiếp tục chơi không? (1: Yes, 2: No): ");
                         string continueInput = Console.ReadLine();
 
                         // Kiểm tra điều kiện để thoát khỏi vòng lặp
@@ -1457,6 +1532,8 @@ class Program
         Console.WriteLine($"    Số lần đoán sai: {incorrectGuesses}");
         RenderGraphic(incorrectGuesses);
         Console.ResetColor();
+
+
         Console.Write("    Từ cần đoán: ");
         foreach (char c in revealedChars)
         {
